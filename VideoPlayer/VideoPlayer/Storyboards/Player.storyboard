@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="JKO-my-L4a">
+    <device id="retina5_9" orientation="landscape" appearance="dark"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Player View Controller-->
+        <scene sceneID="qCs-bL-B3Q">
+            <objects>
+                <viewController id="JKO-my-L4a" customClass="PlayerViewController" customModule="VideoPlayerDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="28Q-NP-8RF">
+                        <rect key="frame" x="0.0" y="0.0" width="812" height="375"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W4k-JT-E8P">
+                                <rect key="frame" x="64" y="16" width="21" height="21"/>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="Done"/>
+                                <connections>
+                                    <action selector="done:" destination="JKO-my-L4a" eventType="touchUpInside" id="Lmj-Mc-kZj"/>
+                                </connections>
+                            </button>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S24-tM-lzS">
+                                <rect key="frame" x="64" y="217" width="684" height="129"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ds3-aF-Lf2">
+                                    <rect key="frame" x="0.0" y="0.0" width="684" height="129"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="XUz-qc-tbk" customClass="VideoSlider" customModule="VideoPlayerDemo" customModuleProvider="target">
+                                            <rect key="frame" x="18" y="20" width="648" height="31"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="minimumTrackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="maximumTrackTintColor" white="1" alpha="0.25" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="thumbTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <connections>
+                                                <action selector="sliderValueChanged:" destination="JKO-my-L4a" eventType="valueChanged" id="Oui-N2-2Oj"/>
+                                            </connections>
+                                        </slider>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s6A-Q5-F1y" userLabel="Rew">
+                                            <rect key="frame" x="276.66666666666669" y="80.666666666666686" width="21" height="23"/>
+                                            <state key="normal" image="Rew15"/>
+                                            <connections>
+                                                <action selector="rewind:" destination="JKO-my-L4a" eventType="touchUpInside" id="Nu8-Tt-lkR"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c6r-zi-wsr" userLabel="Play">
+                                            <rect key="frame" x="329.66666666666669" y="79" width="25" height="26"/>
+                                            <state key="normal" image="Play"/>
+                                            <connections>
+                                                <action selector="playPause:" destination="JKO-my-L4a" eventType="touchUpInside" id="ebH-VX-x5t"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BeE-Pa-3sK" userLabel="FF">
+                                            <rect key="frame" x="386.66666666666669" y="80.666666666666686" width="21" height="23"/>
+                                            <state key="normal" image="FF15"/>
+                                            <connections>
+                                                <action selector="fastForward:" destination="JKO-my-L4a" eventType="touchUpInside" id="gK8-dS-BsQ"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iya-MC-4f1" userLabel="Elapsed">
+                                            <rect key="frame" x="20" y="84" width="28.333333333333329" height="15.666666666666671"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mdG-LR-8Q4" userLabel="Remaining">
+                                            <rect key="frame" x="635.66666666666663" y="84" width="28.333333333333371" height="15.666666666666671"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="mdG-LR-8Q4" firstAttribute="trailing" secondItem="XUz-qc-tbk" secondAttribute="trailing" placeholder="YES" id="2Xf-PO-3wv"/>
+                                        <constraint firstItem="XUz-qc-tbk" firstAttribute="leading" secondItem="ds3-aF-Lf2" secondAttribute="leading" constant="20" symbolic="YES" placeholder="YES" id="87x-JH-zb1"/>
+                                        <constraint firstItem="c6r-zi-wsr" firstAttribute="centerX" secondItem="XUz-qc-tbk" secondAttribute="centerX" placeholder="YES" id="AfL-yB-9gW"/>
+                                        <constraint firstItem="c6r-zi-wsr" firstAttribute="top" secondItem="XUz-qc-tbk" secondAttribute="bottom" constant="29" placeholder="YES" id="BzH-XK-0Bs"/>
+                                        <constraint firstAttribute="trailing" secondItem="XUz-qc-tbk" secondAttribute="trailing" constant="20" symbolic="YES" placeholder="YES" id="FZM-AN-vkh"/>
+                                        <constraint firstItem="mdG-LR-8Q4" firstAttribute="top" secondItem="Iya-MC-4f1" secondAttribute="top" placeholder="YES" id="boe-Ub-OGy"/>
+                                        <constraint firstItem="s6A-Q5-F1y" firstAttribute="centerY" secondItem="c6r-zi-wsr" secondAttribute="centerY" placeholder="YES" id="chV-9p-EL4"/>
+                                        <constraint firstItem="Iya-MC-4f1" firstAttribute="leading" secondItem="XUz-qc-tbk" secondAttribute="leading" placeholder="YES" id="fl5-CW-DXp"/>
+                                        <constraint firstAttribute="bottom" secondItem="c6r-zi-wsr" secondAttribute="bottom" constant="24" placeholder="YES" id="hCD-LW-k9L"/>
+                                        <constraint firstItem="BeE-Pa-3sK" firstAttribute="leading" secondItem="c6r-zi-wsr" secondAttribute="trailing" constant="32" placeholder="YES" id="iSr-Kx-2Ex"/>
+                                        <constraint firstItem="Iya-MC-4f1" firstAttribute="top" secondItem="XUz-qc-tbk" secondAttribute="bottom" constant="34" placeholder="YES" id="k1i-Zj-DGx"/>
+                                        <constraint firstItem="BeE-Pa-3sK" firstAttribute="centerY" secondItem="c6r-zi-wsr" secondAttribute="centerY" placeholder="YES" id="pTA-xp-NE9"/>
+                                        <constraint firstItem="s6A-Q5-F1y" firstAttribute="trailing" secondItem="c6r-zi-wsr" secondAttribute="leading" constant="-32" placeholder="YES" id="rjV-qw-8c2"/>
+                                        <constraint firstItem="XUz-qc-tbk" firstAttribute="top" secondItem="ds3-aF-Lf2" secondAttribute="top" constant="20" symbolic="YES" placeholder="YES" id="wwU-iG-7bL"/>
+                                    </constraints>
+                                </view>
+                                <blurEffect style="dark"/>
+                            </visualEffectView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Wkc-Wg-XZD" firstAttribute="trailing" secondItem="S24-tM-lzS" secondAttribute="trailing" constant="20" id="5zs-Vy-fUr"/>
+                            <constraint firstItem="S24-tM-lzS" firstAttribute="bottom" secondItem="Wkc-Wg-XZD" secondAttribute="bottom" constant="-8" id="RYq-YE-N3O"/>
+                            <constraint firstItem="S24-tM-lzS" firstAttribute="leading" secondItem="Wkc-Wg-XZD" secondAttribute="leading" constant="20" id="hdI-vB-kMF"/>
+                            <constraint firstItem="W4k-JT-E8P" firstAttribute="top" secondItem="Wkc-Wg-XZD" secondAttribute="top" constant="16" id="xYs-pS-574"/>
+                            <constraint firstItem="W4k-JT-E8P" firstAttribute="leading" secondItem="Wkc-Wg-XZD" secondAttribute="leading" constant="20" id="ybe-Vf-B6l"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Wkc-Wg-XZD"/>
+                    </view>
+                    <connections>
+                        <outlet property="controlsView" destination="S24-tM-lzS" id="9db-Z1-yvh"/>
+                        <outlet property="elapsedTimeLabel" destination="Iya-MC-4f1" id="GAq-eo-bN9"/>
+                        <outlet property="ffButton" destination="BeE-Pa-3sK" id="POO-kq-aly"/>
+                        <outlet property="playPauseButton" destination="c6r-zi-wsr" id="vyk-ad-L3r"/>
+                        <outlet property="remainingTimeLabel" destination="mdG-LR-8Q4" id="G5S-1y-x57"/>
+                        <outlet property="rewButton" destination="s6A-Q5-F1y" id="nH3-bU-nOX"/>
+                        <outlet property="slider" destination="XUz-qc-tbk" id="Guz-ZU-v4E"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LJa-CF-7Vl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="72.799999999999997" y="207.63546798029557"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Done" width="21" height="21"/>
+        <image name="FF15" width="21" height="23"/>
+        <image name="Play" width="25" height="26"/>
+        <image name="Rew15" width="21" height="23"/>
+    </resources>
+</document>

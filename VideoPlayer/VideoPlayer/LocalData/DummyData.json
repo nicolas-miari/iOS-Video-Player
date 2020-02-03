@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Keyboard",
+    "presenter_name": "Nicolás Miari",
+    "description": "Finger hitting mac keyboard a few times.",
+    "thumbnail_url": "https://example.com/images/keyboard.jpg",
+    "video_url": "https://example.com/videos/keyboard.mp4",
+    "video_duration": 2000
+  }
+]
