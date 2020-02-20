@@ -59,6 +59,13 @@ class PlaylistViewModel {
     func item(at indexPath: IndexPath) -> PlaylistItemViewModel {
         return items[indexPath.row]
     }
+
+    func playerViewModelForItem(at indexPath: IndexPath) -> PlayerViewModel {
+        let item = items[indexPath.row]
+        let url = item.videoURL
+        let videoItem = VideoItem(url: url)
+        return PlayerViewModel(videoItem: videoItem, readyHandler: {})
+    }
 }
 
 // MARK: - Supporting Types

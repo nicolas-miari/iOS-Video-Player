@@ -10,13 +10,13 @@
         <!--Playlist-->
         <scene sceneID="kbi-r9-vX0">
             <objects>
-                <tableViewController title="Playlist" id="CIh-c6-pdm" customClass="PlaylistViewController" customModule="VideoPlayerDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Playlist" id="CIh-c6-pdm" customClass="PlaylistViewController" customModule="VideoPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="118" estimatedRowHeight="118" sectionHeaderHeight="28" sectionFooterHeight="28" id="QjA-tY-Omt">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PlaylistViewCell" rowHeight="118" id="LIe-0m-f6y" customClass="PlaylistViewCell" customModule="VideoPlayerDemo" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PlaylistViewCell" rowHeight="118" id="LIe-0m-f6y" customClass="PlaylistViewCell" customModule="VideoPlayer" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="118"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LIe-0m-f6y" id="3AP-Pz-cCN">
@@ -29,7 +29,7 @@
                                                 <constraint firstAttribute="width" secondItem="cWK-yr-95E" secondAttribute="height" multiplier="16:9" id="ADk-F4-cDw"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jhv-Ib-UxU">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Jhv-Ib-UxU">
                                             <rect key="frame" x="198" y="11" width="196" height="26.5"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                             <nil key="textColor"/>

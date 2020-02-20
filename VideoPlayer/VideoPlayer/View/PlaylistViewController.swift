@@ -103,16 +103,12 @@ class PlaylistViewController: UITableViewController {
     }
 
     private func playVideo(at indexPath: IndexPath) {
-
-        let sourceRect = sourceRectForThumbnail(at: indexPath)
-
-        let item = viewModel.item(at: indexPath)
-        let player = AVPlayer(url: item.videoURL)
         guard let playerController = UIStoryboard(name: "Player", bundle: nil).instantiateInitialViewController() as? PlayerViewController else {
             fatalError("!!")
         }
-        
-        playerController.player = player
+        let sourceRect = sourceRectForThumbnail(at: indexPath)
+
+        playerController.viewModel = viewModel.playerViewModelForItem(at: indexPath)
         playerController.transitioningDelegate = FullscreenTransitionDelegate.default
         playerController.sourceFrame = sourceRect
         

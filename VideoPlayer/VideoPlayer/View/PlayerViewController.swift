@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AVKit
 
 /**
  Custom video player view controller that mimics the appearance of AVPlayerViewController for the most part,
@@ -32,10 +31,17 @@ class PlayerViewController: UIViewController {
 
     // MARK: - Configuration
 
-    var player: AVPlayer! {
+    var viewModel: PlayerViewModel! {
         didSet {
-            if let duration = player.currentItem?.asset.duration {
-                self.durationInSeconds = duration.seconds
+            viewModel?.playbackProgressHandler = {[unowned self] (time) in
+                guard self.isPlaying else { return }
+                self.updateSlider(time: time)
+                self.updateLabels(time: time)
+            }
+            viewModel.playbackCompletionHandler = {[unowned self] in
+                self.isPlaying = false
+                //self.updateSlider(time: 0)
+                //self.updateLabels(time: 0)
             }
         }
     }
@@ -48,14 +54,7 @@ class PlayerViewController: UIViewController {
     fileprivate var animatingToggleControlView = false
 
     /// CoreAnimation layer that actually renders the video content.
-    fileprivate var videoLayer: AVPlayerLayer!
-
-    /// Cached duration of the video asset in seconds, for updating labels during playback/seeking.
-    fileprivate var durationInSeconds: Double = 0
-
-    /// One-second timer used for periodically updating the progress slider and timestamp labels while
-    /// the video plays.
-    fileprivate var refreshTimer: Timer!
+    fileprivate var videoLayer: CALayer!
 
     // MARK: - UIViewController
 
@@ -78,12 +77,9 @@ class PlayerViewController: UIViewController {
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(tapHandler(_:)))
         view.addGestureRecognizer(recognizer)
 
-        self.videoLayer = AVPlayerLayer()
-        videoLayer.videoGravity = .resizeAspect
+        self.videoLayer = viewModel.videoLayer
         view.layer.insertSublayer(videoLayer, at: 0)
-
-        // Determine the maximum frame width of the remaining time label:
-        updateLabels()
+        videoLayer.isHidden = true
 
         // Setup PORTRAIT constraints:
         portraitConstraints.append(slider.topAnchor.constraint(equalTo: controlsView.topAnchor, constant: 22))
@@ -131,6 +127,10 @@ class PlayerViewController: UIViewController {
         visualEffectsView.layer.mask = mask
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         updateControlContraints(for: size, duration: coordinator.transitionDuration)
     }
@@ -142,10 +142,12 @@ class PlayerViewController: UIViewController {
             self?.toggleControlVisibility()
         })
 
-        videoLayer.player = player
+        /*
+         Do not update labels until video starts playing. Video duration cannot be reliably
+         queried until the underlying player item is in the 'ready' state.
+         */
+        videoLayer.isHidden = false
         self.isPlaying = true
-
-        self.refreshTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
     }
 
     // MARK: - Programmatic Operation
@@ -153,16 +155,15 @@ class PlayerViewController: UIViewController {
     private (set) var isPlaying: Bool {
         set {
             if newValue {
-                player.rate = 1.0
+                viewModel.play()
                 playPauseButton?.setImage(UIImage(named: "Pause"), for: .normal)
             } else {
-                player.rate = 0.0
+                viewModel.pause()
                 playPauseButton?.setImage(UIImage(named: "Play"), for: .normal)
             }
-            player.rate = newValue ? 1.0 : 0.0
         }
         get {
-            return (player.rate == 1.0)
+            return viewModel.isPlaying
         }
     }
 
@@ -177,20 +178,18 @@ class PlayerViewController: UIViewController {
     // MARK: - Control Actions
 
     @IBAction func done(_ sender: Any) {
-
-        refreshTimer.invalidate()
-
+        self.isPlaying = false
         hideControls(animated: false, completion: {
             self.dismiss(animated: true, completion: nil)
         })
     }
 
     @IBAction func sliderValueChanged(_ sender: UISlider) {
-        let elapsedSeconds = durationInSeconds * Double(sender.value)
-        let time = CMTime(seconds: elapsedSeconds, preferredTimescale: 1)
-        player.seek(to: time, completionHandler: { (_) in
-            self.updateLabels()
-        })
+        self.isPlaying = false
+        let elapsedSeconds = viewModel.totalDuration * Double(sender.value)
+        viewModel.seek(to: elapsedSeconds) {
+            self.updateLabels(time: elapsedSeconds)
+        }
     }
 
     @IBAction func playPause(_ sender: UIButton) {
@@ -198,36 +197,22 @@ class PlayerViewController: UIViewController {
     }
 
     @IBAction func rewind(_ sender: UIButton) {
-        let seconds = player.currentTime().seconds
+        let seconds = viewModel.currentTime
         let newTime = seconds >= 15 ? seconds - 15 : 0
-
-        player.seek(to: CMTime(seconds: newTime, preferredTimescale: 1), completionHandler: { (_) in
-            self.updateSlider()
-            self.updateLabels()
-        })
+        viewModel.seek(to: newTime) {
+            self.updateSlider(time: newTime)
+            self.updateLabels(time: newTime)
+        }
     }
 
     @IBAction func fastForward(_ sender: UIButton) {
-        let seconds = player.currentTime().seconds
-        let newTime = seconds + 15 <= durationInSeconds ? seconds + 15 : durationInSeconds
-
-        player.seek(to: CMTime(seconds: newTime, preferredTimescale: 1), completionHandler: { (_) in
-            self.updateSlider()
-            self.updateLabels()
-        })
-    }
-
-    // MARK: - Timer Callbacks
-
-    @objc fileprivate func timerFired() {
-        guard isPlaying else {
-            return
+        let seconds = viewModel.currentTime
+        let total = viewModel.totalDuration
+        let newTime = seconds + 15 <= total ? seconds + 15 : total
+        viewModel.seek(to: newTime) {
+            self.updateSlider(time: newTime)
+            self.updateLabels(time: newTime)
         }
-        // Update slider:
-        updateSlider()
-
-        // Update labels:
-        updateLabels()
     }
 
     // MARK: - Gesture Handlers
@@ -304,19 +289,15 @@ class PlayerViewController: UIViewController {
 
     // MARK: - UI Refresh
 
-    private func updateLabels() {
-        let elapsedSeconds = player.currentTime().seconds
-        let remainingSeconds = durationInSeconds - elapsedSeconds
-
-        let showHours = durationInSeconds > 3600
-
-        elapsedTimeLabel.text = String(seconds: Int(elapsedSeconds), showHours: showHours)
+    private func updateLabels(time: Double) {
+        let remainingSeconds = viewModel.totalDuration - time
+        let showHours = viewModel.totalDuration > 3600
+        elapsedTimeLabel.text = String(seconds: Int(time), showHours: showHours)
         remainingTimeLabel.text = "-" + String(seconds: Int(remainingSeconds), showHours: showHours)
     }
 
-    private func updateSlider() {
-        let elapsedSeconds = player.currentTime().seconds
-        let ratio = elapsedSeconds / durationInSeconds
+    private func updateSlider(time: Double) {
+        let ratio = time / viewModel.totalDuration
         slider.value = Float(ratio)
     }
 }
